@@ -269,7 +269,7 @@ def main():
 
     steamapps = Path.home() / '.local/share/Steam/steamapps'
     drive_c = steamapps / 'compatdata/945360/pfx/drive_c'
-    appdata_ll = drive_c.joinpath / 'users/steamuser/AppData/LocalLow'
+    appdata_ll = drive_c / 'users/steamuser/AppData/LocalLow'
     amongus = appdata_ll / 'Innersloth/Among Us/playerPrefs'
     player_prefs = PlayerPrefs.from_path(amongus)
     print(repr(player_prefs))
