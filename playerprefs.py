@@ -8,7 +8,20 @@ from pathlib import Path
 from typing import IO, Union
 
 
+__all__ = ['Control', 'Color', 'Hat', 'Skin', 'Pet', 'Language', 'PlayerPrefs']
+
+
 BOOL = {'True': True, 'False': False}
+
+
+class U8(int):
+    """A 8-bit unsigned int."""
+
+    def __init__(self, value):
+        if 0 <= int(value) <= 255:
+            super().__init__()
+        else:
+            raise ValueError('UInt7 must be between 0 and 255.')
 
 
 class Control(IntEnum):
@@ -16,7 +29,7 @@ class Control(IntEnum):
 
     MOUSE = 0
     MOUSE_AND_KEYBOARD = 1
-    
+
     def __str__(self):
         return str(self.value)
 
@@ -36,7 +49,7 @@ class Color(IntEnum):
     BROWN = 9
     CYAN = 10
     LIME = 11
-    
+
     def __str__(self):
         return str(self.value)
 
@@ -112,7 +125,7 @@ class Hat(IntEnum):
     VIKING = 18
     SECURITY = 19
     WHITE_TOPHAT = 29
-    
+
     def __str__(self):
         return str(self.value)
 
@@ -130,7 +143,7 @@ class Skin(IntEnum):
     SUIT_BLACK = 7
     SUIT_WHITE = 8
     SECURITY = 9
-    
+
     def __str__(self):
         return str(self.value)
 
@@ -139,19 +152,9 @@ class Pet(IntEnum):
     """Available pets."""
 
     NONE = 0
-    
+
     def __str__(self):
         return str(self.value)
-
-
-class U8(int):
-    """A 8-bit unsigned int."""
-
-    def __init__(self, value):
-        if 0 <= int(value) <= 255:
-            super().__init__()
-        else:
-            raise ValueError('UInt7 must be between 0 and 255.')
 
 
 class Language(IntEnum):
@@ -162,13 +165,13 @@ class Language(IntEnum):
     PORTOGUESE = 2
     KOREAN = 3
     RUSSIAN = 4
-    
+
     def __str__(self):
         return str(self.value)
 
 
 @dataclass
-class PlayerPrefs:
+class PlayerPrefs:  # pylint: disable=R0902
     """Among Us player preferences."""
 
     name: str
@@ -193,7 +196,7 @@ class PlayerPrefs:
     vsync: bool
     unknown20: int
     unknown21: int
-    
+
     def __iter__(self):
         yield self.name
         yield self.control
@@ -217,7 +220,7 @@ class PlayerPrefs:
         yield self.vsync
         yield self.unknown20
         yield self.unknown21
-        
+
     def __str__(self):
         return ','.join(map(str, self))
 
@@ -260,9 +263,11 @@ class PlayerPrefs:
 def test():
     """Tests the reader."""
 
-    relpath = '.local/share/Steam/steamapps/compatdata/945360/pfx/drive_c/users/steamuser/AppData/LocalLow/Innersloth/Among Us/playerPrefs'
-    path = Path.home().joinpath(relpath)
-    player_prefs = PlayerPrefs.from_path(path)
+    steamapps = Path.home() / '.local/share/Steam/steamapps'
+    drive_c = steamapps / 'compatdata/945360/pfx/drive_c'
+    appdata_ll = drive_c.joinpath / 'users/steamuser/AppData/LocalLow'
+    amongus = appdata_ll / 'Innersloth/Among Us/playerPrefs'
+    player_prefs = PlayerPrefs.from_path(amongus)
     print(repr(player_prefs))
 
 
