@@ -4,6 +4,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
+from os import name
 from pathlib import Path
 from typing import IO, Union
 
@@ -260,8 +261,11 @@ class PlayerPrefs:  # pylint: disable=R0902
             file.write(str(self))
 
 
-def test():
+def main():
     """Tests the reader."""
+
+    if name != 'posix':
+        raise NotImplementedError('Testing not implementedon this platform.')
 
     steamapps = Path.home() / '.local/share/Steam/steamapps'
     drive_c = steamapps / 'compatdata/945360/pfx/drive_c'
@@ -272,4 +276,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    main()
